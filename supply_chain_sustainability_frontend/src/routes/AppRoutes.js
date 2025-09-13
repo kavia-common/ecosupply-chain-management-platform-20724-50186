@@ -20,10 +20,15 @@ import NotFoundPage from '../pages/misc/NotFoundPage';
 
 // PUBLIC_INTERFACE
 export default function AppRoutes() {
-  /** Defines application routes and protects them based on roles. */
+  /** Defines application routes and protects them based on roles. 
+   * Rules:
+   * - "/" redirects to "/login"
+   * - "/login" is public and will self-redirect to dashboard if already authenticated
+   * - All app pages are protected and require a role (Admin/User/Supplier)
+   */
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/login" element={<LoginPage />} />
 
       <Route element={<ProtectedRoute roles={[ROLES.ADMIN, ROLES.USER, ROLES.SUPPLIER]} />}>
