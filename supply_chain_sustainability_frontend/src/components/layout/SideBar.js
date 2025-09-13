@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { useAuth, ROLES } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
+import { ROLES } from '../../constants/roles';
 
 function LinkItem({ to, label }) {
   return (

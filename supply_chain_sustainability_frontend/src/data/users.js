@@ -1,4 +1,4 @@
-import { ROLES } from '../contexts/AuthContext';
+import { ROLES } from '../constants/roles';
 
 /**
  * Demo user directory (in-memory).

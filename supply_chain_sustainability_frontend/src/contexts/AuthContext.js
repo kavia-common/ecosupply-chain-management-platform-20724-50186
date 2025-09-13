@@ -1,8 +1,6 @@
 import React, { createContext, useContext, useMemo, useState } from 'react';
 import { login as serviceLogin } from '../services/authService';
-
-// Role constants
-export const ROLES = { ADMIN: 'Admin', USER: 'User', SUPPLIER: 'Supplier' };
+import { ROLES } from '../constants/roles';
 
 const AuthContext = createContext({
   user: null,

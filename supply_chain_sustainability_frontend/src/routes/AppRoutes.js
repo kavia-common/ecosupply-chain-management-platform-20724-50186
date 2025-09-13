@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { ROLES } from '../contexts/AuthContext';
+import { ROLES } from '../constants/roles';
 import ProtectedRoute from './ProtectedRoute';
 
 import LoginPage from '../pages/auth/LoginPage';
