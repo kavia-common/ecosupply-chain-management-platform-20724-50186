@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useMemo, useState } from 'react';
-import { users as seedUsers } from '../data/users';
+import { login as serviceLogin } from '../services/authService';
 
 // Role constants
 export const ROLES = { ADMIN: 'Admin', USER: 'User', SUPPLIER: 'Supplier' };
@@ -25,11 +25,14 @@ export function AuthProvider({ children }) {
     return saved ? JSON.parse(saved) : null;
   });
 
-  const login = async ({ email, password }) => {
-    // Simulate auth by checking in-memory users
-    const match = seedUsers.find(u => u.email === email && password === 'password');
-    if (!match) throw new Error('Invalid credentials');
-    const sessionUser = { id: match.id, name: match.name, email: match.email, role: match.role };
+  const login = async ({ email, username, password }) => {
+    /**
+     * Accepts either email or username as the identifier.
+     * For backward compatibility, email field from LoginPage will be used as the identifier.
+     */
+    const identifier = (username || email || '').trim();
+    const authed = await serviceLogin(identifier, password);
+    const sessionUser = { id: authed.id, name: authed.name, email: authed.email, role: authed.role };
     setUser(sessionUser);
     localStorage.setItem('scsp_user', JSON.stringify(sessionUser));
     return sessionUser;

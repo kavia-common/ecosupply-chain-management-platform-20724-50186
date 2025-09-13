@@ -5,8 +5,9 @@ import { useAuth } from '../../contexts/AuthContext';
 // PUBLIC_INTERFACE
 export default function LoginPage() {
   /** Login page shown as first landing page with validation and redirects. */
-  const [email, setEmail] = useState('admin@eco.com');
-  const [password, setPassword] = useState('password');
+  // Pre-fill default admin credentials for easier testing
+  const [identifier, setIdentifier] = useState('admin');
+  const [password, setPassword] = useState('password@1234');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
   const navigate = useNavigate();
@@ -21,13 +22,8 @@ export default function LoginPage() {
   }, [user, navigate]);
 
   const validate = () => {
-    if (!email || !password) {
-      setError('Please enter both email and password.');
-      return false;
-    }
-    // very light validation for email format
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
-      setError('Please enter a valid email address.');
+    if (!identifier || !password) {
+      setError('Please enter both username/email and password.');
       return false;
     }
     return true;
@@ -39,7 +35,7 @@ export default function LoginPage() {
     if (!validate()) return;
     setBusy(true);
     try {
-      await login({ email, password });
+      await login({ email: identifier, username: identifier, password });
       const redirectTo = location.state?.from?.pathname || '/dashboard';
       navigate(redirectTo, { replace: true });
     } catch (err) {
@@ -54,22 +50,22 @@ export default function LoginPage() {
       <div className="card auth-card">
         <div className="text-xl mb-2">Welcome to EcoSupply</div>
         <div className="text-sm text-muted mb-4">
-          Sign in with a demo user:
+          Sign in options:
           {' '}
-          admin@eco.com, user@eco.com, supplier@eco.com
-          {' '}
-          (password: password)
+          1) Default Admin — username: <span className="kbd">admin</span>, password: <span className="kbd">password@1234</span>
+          {' · '}
+          2) Demo Emails — admin@eco.com, user@eco.com, supplier@eco.com (password: password)
         </div>
         {error && <div className="tag red mb-2">Error: {error}</div>}
         <form onSubmit={handleSubmit} noValidate>
-          <label className="label" htmlFor="email">Email</label>
+          <label className="label" htmlFor="identifier">Username or Email</label>
           <input
-            id="email"
+            id="identifier"
             className="input"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            placeholder="you@example.com"
-            type="email"
+            value={identifier}
+            onChange={e => setIdentifier(e.target.value)}
+            placeholder="admin or you@example.com"
+            type="text"
             autoComplete="username"
             required
             aria-invalid={!!error}
